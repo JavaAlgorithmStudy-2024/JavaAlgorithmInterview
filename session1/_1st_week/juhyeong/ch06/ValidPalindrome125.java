@@ -1,3 +1,5 @@
+package ch06;
+
 public class ValidPalindrome125 {
 
     public static void main(String[] args) {
@@ -15,5 +17,4 @@ public class ValidPalindrome125 {
 
         return s.equals(reverseS);
     }
-
 }
