@@ -1,0 +1,28 @@
+class Solution {
+    public boolean isValid(String s) {
+        Deque<Character> stack = new ArrayDeque<>();
+
+        for (char c : s.toCharArray()) {
+            // c가 여는 괄호면 닫는 괄호를 stack에 push
+            if (c == '(') {
+                stack.push(')');
+                continue;
+            }
+            if (c == '{') {
+                stack.push('}');
+                continue;
+            }
+            if (c == '[') {
+                stack.push(']');
+                continue;
+            }
+
+            // c가 닫는 괄호면 stack에서 pop
+            if (stack.isEmpty() || stack.pop() != c) {
+                return false;
+            }
+        }
+
+        return stack.isEmpty();
+    }
+}
