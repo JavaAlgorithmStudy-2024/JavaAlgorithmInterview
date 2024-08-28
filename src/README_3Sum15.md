@@ -1,0 +1,118 @@
+## 1. 문제해석
+1. 3개의 요소의 합이 0이인 경우를 배열 안의 배열로 나열해 리턴
+2. 합이 0인 경우가 없을경우 빈 배열을 리턴
+
+---
+
+## 2. 문제풀이
+- -(요소1)== 요소2 + 요소3 이면 될것같다
+   1. 요소 1를 제외한 공간에서 두 요소의 합이 -요소 1인 경우를 탐색
+   2. 내가 기존에 찾아낸 조합인지 확인 아니라면 배열에 추가
+- 실행시간 줄이기
+  1. 비교횟수를 줄이기
+      - 모두 1보다 크거나 같을 경우
+      - ~~최대 2개 빼고 모두 0인 경우~~ (이거는 2번으로 해결됨)
+      - 요소 1과 요소 2가 기존에 있는 조합이라면 그 턴을 넘기기
+  2. 배열 자체를 줄이기
+      - 특수한 경우을 제외하고 모든 수는 1개씩만 존재해도 된다
+      - 왜냐면 같은수의 3개의 조합으로는 위 수식을 만족할수없고
+      - 특수한 경우: 같은수가 2개일 경우 -2n인 수가 존재
+        - ~~방식 1: set이나 map에 저장하되 이미 저장한 수가 등장하면 기존 배열에 -2N인 값이 있는지 찾는다~~
+        - 방식 2: map에 Key를 수로두고 value를 반복 횟수로 저장하는건 어떨까
+
+- -> 최종 흐름
+  1. Map에다가 기존 배열을 저장
+     - 음수라면 minus를 증가시킨다 
+     - key가 있는지 찾는다 있다면 value를 증가한다
+     - 모든 배열요소를 저장한후 
+       - key가 0인게 3개 이상이면 [0,0,0]를 저장한다
+       - Minus가 만약에 0인데 
+         - key가 0인게 2개 이하이면 빈 배열을 return
+         - 아니라면 그냥 return ()
+  2. 이제 중복되지 않은수에서 세 수의 합이 0이게 만드는 알고리즘
+     - 중복되지 않은 수에서 중복되지 않은 두 수의 조합 찾기
+     - 요소1 :map[count]
+       - 만약 value> 1이면 -2a 찾기 있다면 배열에 추가
+       - point=count+1 요소 2는 map[point]
+         - 이때 요소1,요소2가 추가한 배열의 요소와 일치하면 다음 요소로 넘어가기 
+         - 찾기(-(요소1+ 요소2))
+       - 만약 point가 끝에 도달하면 count 증가
+       - 만약 point가 끝이 아니라면 ++point 이때 map.length-1 보다 작아야
+     - 그렇게 끝까지 다 해보고 return 배열
+  - 문제점
+      - 맵은 인덱스가 없다..
+          - keyset를 뽑고 끄응...저장하는것도 일인데..
+      - 맵에서 중복된값을 발견했을때 그냥 덮어씌우는데 어케하지..
+          - 저장시 key탐색한다. 있다면 value를 2로 저장한다.
+
+  - -> 해결 저장할때 key 탐색 있다면 value 2저장 없다면 저장과 동시에 배열에 저장..이게 맞나
+- -> 최최종흐름
+    1. Map에다가 기존 배열을 저장
+        - 음수라면 minus를 증가시킨다
+        - key가 있다면 배열 array[i]를 증가시킨다
+        - key: 수 value : index저장
+        - 모든 배열요소를 저장한 후
+            - array[map.get(0)]이 3개 이상이면 [0,0,0]를 저장한다
+            - else Minus가 만약에 0 이면 return answer[] (비어있음)
+    2. 이제 중복되지 않은수에서 세 수의 합이 0이게 만드는 알고리즘
+        - 중복되지 않은 수에서 중복되지 않은 두 수의 조합 찾기
+        - index2=0; 
+            - array[index2]가 2 이상이라면 map.get(-(2*index))
+            - point=count+1
+                - 이때 요소1,요소2가 추가한 배열의 요소와 일치하면 다음 요소로 넘어가기
+                - 찾기(-(요소1+ 요소2))
+            - 만약 point가 끝에 도달하면 count 증가
+            - 만약 point가 끝이 아니라면 ++point 이때 map.length-1 보다 작아야
+        - 그렇게 끝까지 다 해보고 return 배열
+
+
+- -> ~~최최종흐름~~ (음수인 index는 없다 음수인경우 다른 배열로가게 처리하면 되긴함..)
+    1. Map에다가 기존 배열을 저장
+        - index=0; minus=0;
+        - 음수라면 minus를 증가시킨다
+        - key가 있다면 배열 repeat[map.get(Nums[i])]를 증가시킨다
+        - key가 없다면 배열 number[index]= Nums[i]; index++;
+        - key: 수 value : index
+        - 모든 배열요소를 저장한 후
+            - repeat[map.get(0)]이 3개 이상이면 [0,0,0]를 저장한다
+            - else Minus가 만약에 0이면 return answer[] (비어있음)
+    2. 이제 중복되지 않은수에서 세 수의 합이 0이게 만드는 알고리즘
+        - 중복되지 않은 수에서 중복되지 않은 두 수의 조합 찾기
+        - index2=0;
+        - number[index2]로 탐색
+            - repeat[index2]가 2 이상이고 map.containsKey(-(2*number[index2])) 이면
+              - [number[index2],number[index2],-(2*number[index2])] 저장
+            - point=index2+1
+            - 이때 요소1,요소2가 추가한 배열의 요소와 일치하면 다음 요소로 넘어가기
+            - map.containsKey(-(number[index2]+ number[point])) 이라면
+              - [number[index2],number[point],number[point]+ number[index2]]
+            - 만약 point가 끝에 도달하면 count 증가
+            - 만약 point가 끝이 아니라면 ++point 이때 map.length-1 보다 작아야
+        - 그렇게 끝까지 다 해보고 return 배열
+-----
+- -> 찐막 (배열이 아니라 List에 저장)
+- 아니 list에 contain이 있었네? 이러면 말이 다르지 
+    1. List에다가 기존배열을 저장
+       - minus=0,index=0; zero=0;
+       - 음수라면 minus 증가시킨다
+       - 만약에 list.contain(nums[i])
+         - 만약에 0이라면 zero 증가
+         - 만약에 0이 아니라면
+           - repeat.add(nums[i]);
+       - 아니라면 list.add(nums[i])
+    2. 모든 요소를 저장후 
+       - if(zero>2){[0,0,0] 추가}
+       - repeat 순회
+            - if(number.contains(repeat[i])&&number.contains(-2*repeat[i]))
+              - [repeat[i],repeat[i],-2*repeat[i]]추가
+       - if(minus==0){return result}
+    3. 중복되지 않은 두 수의 조합 찾기
+       - number.contains[number[left]+number[right]]
+         - 저장
+       - right가 끝이라면 right0 left++
+-----
+- -> 찐막
+- 아니 3요소가 크기 순으로 저장되어야하네.?
+       
+
+
