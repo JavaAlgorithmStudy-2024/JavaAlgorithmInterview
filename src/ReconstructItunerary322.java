@@ -15,7 +15,7 @@ public class ReconstructItunerary322 {
 // 출발지 삽입
         stack.push("JFK");
         while (!stack.isEmpty()) {
-// 스택에서 추출될 값을 출발지로 한 도착지 처리
+// 스택에서 추출될 값을 출발지로 한 도착지 처리이
             while (fromToMap.containsKey(stack.getFirst()) && !fromToMap.get(stack.
                     getFirst()).isEmpty()) {
             }//
